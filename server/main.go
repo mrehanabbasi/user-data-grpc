@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	pb "github.com/mrehanabbasi/user-data-grpc/proto"
@@ -24,9 +25,9 @@ func main() {
 	// MongoDB Connection
 	mongoUri := os.Getenv("MONGODB_URI")
 
-	ctx := context.Background()
-	// ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	// defer cancel()
+	// ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(mongoUri))
 	if err != nil {
