@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package users;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/mrehanabbasi/user-data-grpc/proto";
+
+message User {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  Address address = 4;
+}
+
+message Address {
+  string address_line_1 = 1;
+  optional string address_line_2 = 2;
+  string city = 3;
+  string country = 4;
+  string postal_code = 5;
+}
+
+message UserId {
+  string id = 1;
+}
+
+service Users {
+  rpc CreateUser (User) returns (UserId);
+  rpc GetUser (UserId) returns (User);
+  rpc UpdateUser (UserId) returns (google.protobuf.Empty);
+  rpc DeleteUser (UserId) returns (google.protobuf.Empty);
+  rpc GetAllUsers (google.protobuf.Empty) returns (stream User);
+}

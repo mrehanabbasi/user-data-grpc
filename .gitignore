@@ -1,0 +1,6 @@
+*.env*
+bin/
+*.crt
+*.csr
+*.key
+*.pem
