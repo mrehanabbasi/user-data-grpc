@@ -2,14 +2,14 @@ package main
 
 import (
 	pb "github.com/mrehanabbasi/user-data-grpc/proto"
-	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type User struct {
-	Id        string  `bson:"id,omitempty"`
-	FirstName string  `bson:"first_name"`
-	LastName  string  `bson:"last_name"`
-	Address   Address `bson:"address"`
+	Id        primitive.ObjectID `bson:"_id,omitempty"`
+	FirstName string             `bson:"first_name"`
+	LastName  string             `bson:"last_name"`
+	Address   Address            `bson:"address"`
 }
 
 type Address struct {
@@ -20,17 +20,17 @@ type Address struct {
 	PostalCode    string `bson:"postal_code"`
 }
 
-func convertMongoDocToUser(mongoUser User) (*pb.User, error) {
-	mongoData, err := bson.Marshal(mongoUser)
-	if err != nil {
-		return nil, err
+func convertMongoDocToUser(data *User) *pb.User {
+	return &pb.User{
+		Id:        data.Id.Hex(),
+		FirstName: data.FirstName,
+		LastName:  data.LastName,
+		Address: &pb.Address{
+			AddressLine_1: data.Address.AddressLine_1,
+			AddressLine_2: &data.Address.AddressLine_2,
+			City:          data.Address.City,
+			Country:       data.Address.Country,
+			PostalCode:    data.Address.PostalCode,
+		},
 	}
-
-	user := &pb.User{}
-	err = bson.Unmarshal(mongoData, user)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
 }
