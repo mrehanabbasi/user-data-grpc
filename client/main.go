@@ -45,7 +45,9 @@ func main() {
 
 	c := pb.NewUsersClient(conn)
 
-	id := createUser(c)
-	user := getUser(c, id)
+	id1 := createUser(c)
+	user := getUser(c, id1)
 	updateUser(c, user)
+	id2 := createUser(c)
+	deleteUser(c, id2)
 }
