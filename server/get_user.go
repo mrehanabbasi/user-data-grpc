@@ -14,7 +14,7 @@ import (
 func (*Server) GetUser(ctx context.Context, in *pb.UserId) (*pb.User, error) {
 	log.Println("Invoked GetUser function...")
 
-	user := pb.User{}
+	user := User{}
 
 	err := collection.FindOne(ctx, bson.M{"id": in.Id}).Decode(&user)
 	if err != nil {
@@ -24,5 +24,10 @@ func (*Server) GetUser(ctx context.Context, in *pb.UserId) (*pb.User, error) {
 		return nil, status.Errorf(codes.Internal, "Failed to get user: %v\n", err)
 	}
 
-	return &user, nil
+	res, err := convertMongoDocToUser(user)
+	if err != nil {
+		return nil, status.Error(codes.Internal, "Cannot convert from MongoDB to User object")
+	}
+
+	return res, nil
 }
