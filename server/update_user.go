@@ -12,7 +12,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (*Server) UpdateUser(ctx context.Context, in *pb.UserId) (*emptypb.Empty, error) {
+func (*Server) UpdateUser(ctx context.Context, in *pb.User) (*emptypb.Empty, error) {
 	log.Println("Invoking Updateuser function...")
 
 	filter := bson.M{"id": in.Id}

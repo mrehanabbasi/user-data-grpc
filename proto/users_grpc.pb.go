@@ -25,7 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type UsersClient interface {
 	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*UserId, error)
 	GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error)
-	UpdateUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetAllUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Users_GetAllUsersClient, error)
 }
@@ -56,7 +56,7 @@ func (c *usersClient) GetUser(ctx context.Context, in *UserId, opts ...grpc.Call
 	return out, nil
 }
 
-func (c *usersClient) UpdateUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *usersClient) UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/users.Users/UpdateUser", in, out, opts...)
 	if err != nil {
@@ -112,7 +112,7 @@ func (x *usersGetAllUsersClient) Recv() (*User, error) {
 type UsersServer interface {
 	CreateUser(context.Context, *User) (*UserId, error)
 	GetUser(context.Context, *UserId) (*User, error)
-	UpdateUser(context.Context, *UserId) (*emptypb.Empty, error)
+	UpdateUser(context.Context, *User) (*emptypb.Empty, error)
 	DeleteUser(context.Context, *UserId) (*emptypb.Empty, error)
 	GetAllUsers(*emptypb.Empty, Users_GetAllUsersServer) error
 	mustEmbedUnimplementedUsersServer()
@@ -128,7 +128,7 @@ func (UnimplementedUsersServer) CreateUser(context.Context, *User) (*UserId, err
 func (UnimplementedUsersServer) GetUser(context.Context, *UserId) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedUsersServer) UpdateUser(context.Context, *UserId) (*emptypb.Empty, error) {
+func (UnimplementedUsersServer) UpdateUser(context.Context, *User) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
 func (UnimplementedUsersServer) DeleteUser(context.Context, *UserId) (*emptypb.Empty, error) {
@@ -187,7 +187,7 @@ func _Users_GetUser_Handler(srv interface{}, ctx context.Context, dec func(inter
 }
 
 func _Users_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserId)
+	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func _Users_UpdateUser_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: "/users.Users/UpdateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UsersServer).UpdateUser(ctx, req.(*UserId))
+		return srv.(UsersServer).UpdateUser(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }

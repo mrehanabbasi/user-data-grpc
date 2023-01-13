@@ -28,7 +28,7 @@ message UserId {
 service Users {
   rpc CreateUser (User) returns (UserId);
   rpc GetUser (UserId) returns (User);
-  rpc UpdateUser (UserId) returns (google.protobuf.Empty);
+  rpc UpdateUser (User) returns (google.protobuf.Empty);
   rpc DeleteUser (UserId) returns (google.protobuf.Empty);
   rpc GetAllUsers (google.protobuf.Empty) returns (stream User);
 }
